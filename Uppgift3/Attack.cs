@@ -15,6 +15,7 @@
 		* The name of the attack, can not be null or empty.
 		* The value can only be modified within this class or its derived classes.
 		*/
+
 		public string Name
 		{
 			get => _name;
@@ -29,6 +30,7 @@
 		* The base power of the attack, can not zero or negative.
 		* The value can only be modified within this class or its derived classes.
 		*/
+
 		public int BasePower
 		{
 			get => _basePower;
