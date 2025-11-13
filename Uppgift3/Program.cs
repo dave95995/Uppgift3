@@ -1,11 +1,11 @@
 ﻿namespace Uppgift3
 {
-    internal class Program
-    {
+	internal class Program
+	{
 
-        static void Main(string[] args)
-        {
-
-        }
-    }
+		private static void Main(string[] args)
+		{
+			_ = new Attack("Flamethrower", ElementType.Fire, 1);
+		}
+	}
 }
