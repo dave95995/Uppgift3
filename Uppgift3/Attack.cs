@@ -6,14 +6,14 @@
 		private int _basePower;
 
 		/*
-		* The element type of the attack.
-		* The property is read-only.
+			The element type of the attack.
+			The property is read-only.
 		*/
 		public ElementType Type { get; }
 
 		/*
-		* The name of the attack, can not be null or empty.
-		* The value can only be modified within this class or its derived classes.
+			The name of the attack, can not be null or empty.
+			The value can only be modified within this class or its derived classes.
 		*/
 
 		public string Name
@@ -27,8 +27,8 @@
 		}
 
 		/*
-		* The base power of the attack, can not zero or negative.
-		* The value can only be modified within this class or its derived classes.
+			The base power of the attack, can not be zero or negative.
+			The value can only be modified within this class or its derived classes.
 		*/
 
 		public int BasePower
@@ -54,6 +54,11 @@
 			int totalPower = BasePower + level;
 			string output = $"{Name} hit with a total power of {totalPower}";
 			Console.WriteLine(output);
+		}
+
+		public override string ToString()
+		{
+			return $"{Name} | Type: {Type} | BasePower: {BasePower}";
 		}
 	}
 }
