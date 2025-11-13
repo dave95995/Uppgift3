@@ -56,7 +56,9 @@
 	{
 		public static readonly Random s_Random = new();
 
-		private static void Main(string[] args)
+
+
+		public static void Part1()
 		{
 			List<Attack> attacks =
 			[
@@ -85,6 +87,35 @@
 				}
 				Console.WriteLine();
 			}
+		}
+		public static void Part2()
+		{
+
+			List<Attack> attacks =
+			[
+				new Attack("Flamethrower", ElementType.Fire, 12),
+				new Attack("Poison Ivy", ElementType.Grass, 8),
+				new Attack("Wave", ElementType.Water, 4),
+			];
+
+
+			List<Attack> legendaryAttacks = new List<Attack>();
+			foreach (var attack in attacks)
+			{
+				legendaryAttacks.Add(new LegendaryAttack(attack));
+			}
+
+
+			new Charmander("Charmander_1", 2, attacks).RandomAttack();
+			new Charmander("Charmander_1", 2, legendaryAttacks).RandomAttack();
+
+		}
+		private static void Main(string[] args)
+		{
+
+			//Part1();
+			Part2();
+
 		}
 	}
 }

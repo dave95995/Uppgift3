@@ -48,7 +48,7 @@
 			BasePower = basePower;
 		}
 
-		public void Use(int level)
+		public virtual void Use(int level)
 		{
 			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(level);
 			int totalPower = BasePower + level;
