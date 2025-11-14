@@ -21,13 +21,9 @@
 		public override Pokemon RaiseLevel()
 		{
 			_ = base.RaiseLevel();
-			if (Level >= _evolveAtLevel)
-			{
-				Console.WriteLine("Evolving to a Charmeleon!");
-				return Evolve();
-			}
-			return this;
+			return Level >= _evolveAtLevel ? Evolve() : this;
 		}
+
 
 		/*
 		public void Evolve()
