@@ -107,7 +107,7 @@
 			if (_attacks.Count > 0)
 			{
 				int i = 1;
-				foreach (var attack in Attacks)
+				foreach (Attack attack in Attacks)
 				{
 					Console.WriteLine($"{i++}: {attack}");
 				}
@@ -118,9 +118,13 @@
 				{
 					index -= 1;
 					if (index >= 0 && index < _attacks.Count)
+					{
 						_attacks[index].Use(Level);
+					}
 					else
+					{
 						Console.WriteLine("Invalid index");
+					}
 				}
 				else
 				{
@@ -129,16 +133,22 @@
 			}
 		}
 
-		public void RaiseLevel()
+		public virtual Pokemon RaiseLevel()
 		{
 			Level += 1;
 			string message = $"{Name} just leveled up to level: {Level}";
 			Console.WriteLine(message);
+			return this;
 		}
 
 		public override string ToString()
 		{
 			return $"{Name} (Type: {Type}, Level: {Level}) - Attacks: {Attacks.Count}";
+		}
+
+		public virtual void Speak()
+		{
+			Console.WriteLine($"{Name} says: Char char");
 		}
 	}
 }

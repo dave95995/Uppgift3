@@ -6,9 +6,11 @@
 		{
 		}
 
+		/*
 		public void TakeNap()
 		{
 			Console.WriteLine($"{Name} takes a nap");
 		}
+		*/
 	}
 }

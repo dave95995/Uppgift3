@@ -1,7 +1,8 @@
 ﻿namespace Uppgift3
 {
-	public interface IEvolvable
+	internal interface IEvolvable
 	{
-		void Evolve();
+		//void Evolve();
+		Pokemon Evolve();
 	}
 }
