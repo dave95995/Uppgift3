@@ -5,60 +5,50 @@
 		private string _name = string.Empty;
 		private int _basePower;
 
-		/*
-			The element type of the attack.
-			The property is read-only.
-		*/
+		protected readonly IUserIO _io;
+
+		// Detta ska inte kunna ändras utanför konstruktorn.
 		public ElementType Type { get; }
 
-		/*
-			The name of the attack, can not be null or empty.
-			The value can only be modified within this class or its derived classes.
-		*/
-
+		// Subklassen ska kunna använda set på Name
 		public string Name
 		{
 			get => _name;
 			protected set
 			{
-				ArgumentException.ThrowIfNullOrEmpty(value, nameof(value));
+				ArgumentException.ThrowIfNullOrWhiteSpace(value, nameof(value));
 				_name = value;
 			}
 		}
 
-		/*
-			The base power of the attack, can not be zero or negative.
-			The value can only be modified within this class or its derived classes.
-		*/
-
+		// Subklassen ska kunna använda set på BasePower
 		public int BasePower
 		{
 			get => _basePower;
 			protected set
 			{
-				ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
+				ArgumentOutOfRangeException.ThrowIfNegative(value, nameof(value));
 				_basePower = value;
 			}
 		}
 
-		public Attack(string name, ElementType type, int basePower)
+		public Attack(string name, ElementType type, int basePower, IUserIO io)
 		{
 			Name = name;
 			Type = type;
 			BasePower = basePower;
+			_io = io;
 		}
 
 		public virtual void Use(int level)
 		{
-			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(level);
-			int totalPower = BasePower + level;
-			string output = $"{Name} hit with a total power of {totalPower}";
-			Console.WriteLine(output);
+			int totalPower = _basePower + level;
+			_io.Print($"{Name} hit with a total power of {totalPower}");
 		}
 
 		public override string ToString()
 		{
-			return $"{Name} | Type: {Type} | BasePower: {BasePower}";
+			return $"Attack: {Name} BasePower: {BasePower}";
 		}
 	}
 }

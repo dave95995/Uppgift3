@@ -2,79 +2,84 @@
 {
 	internal class Program
 	{
-		public static readonly Random s_Random = new();
-
-		public static void Part1()
+		private static void Part1()
 		{
-			List<Attack> attacks =
-			[
-				new Attack("Flamethrower", ElementType.Fire, 12),
-				new Attack("Ember", ElementType.Fire, 6),
-				new Attack("Poison Ivy", ElementType.Grass, 8),
-				new Attack("Wave", ElementType.Water, 4),
-			];
+			ConsoleUI con = new ConsoleUI();
 
-			List<Pokemon> pokemons = [
-				new Charmander("Charmander_1", 1, attacks),
-				new Squirtle("Squirt_1", 2, attacks),
-				new Bulbasaur("Bulba_1", 4, attacks),
-				new Charmander("Charmander_2", 3, attacks),
-			];
+			List<Attack> attacks = new List<Attack>();
+			attacks.Add(new Attack("Flamethrower", ElementType.Fire, 12, con));
+			attacks.Add(new Attack("Ember", ElementType.Fire, 6, con));
+			attacks.Add(new Attack("Wave", ElementType.Water, 5, con));
+			attacks.Add(new Attack("Poison Ivy", ElementType.Grass, 4, con));
 
-			foreach (Pokemon pokemon in pokemons)
+			List<Pokemon> pokemons = [];
+			pokemons.Add(new Charmander("FireCharm", 2, attacks, con));
+			pokemons.Add(new Squirtle("WaterSquirtle", 1, attacks, con));
+			pokemons.Add(new Bulbasaur("GrassBulb", 1, attacks, con));
+
+			foreach (var pokemon in pokemons)
 			{
-				Console.WriteLine(pokemon);
-				Console.WriteLine("Called RaiseLevel()");
-				_ = pokemon.RaiseLevel();
-				pokemon.RandomAttack();
-				//if (pokemon is IEvolvable evolv)
-				//{
-				//	evolv.Evolve();
-				//}
-				Console.WriteLine();
+				pokemon.RaiseLevel();
+				if (pokemon is IEvolvable evolable)
+				{
+					evolable.Evolve();
+				}
+				pokemon.Attack();
 			}
 		}
 
 		public static void Part2()
 		{
-			List<Attack> attacks =
-			[
-				new Attack("Flamethrower", ElementType.Fire, 12),
-				new Attack("Poison Ivy", ElementType.Grass, 8),
-				new Attack("Wave", ElementType.Water, 4),
-			];
+			ConsoleUI con = new ConsoleUI();
 
-			List<Attack> legendaryAttacks = [];
-			foreach (Attack attack in attacks)
+			List<Attack> attacks = new List<Attack>();
+			attacks.Add(new Attack("Flamethrower", ElementType.Fire, 12, con));
+			attacks.Add(new Attack("Wave", ElementType.Water, 5, con));
+			attacks.Add(new Attack("Poison Ivy", ElementType.Grass, 4, con));
+
+			foreach (var attack in attacks.ToList())
 			{
-				legendaryAttacks.Add(new LegendaryAttack(attack));
+				attacks.Add(new LegendaryAttack(attack, con));
 			}
 
-			List<Pokemon> pokemons = [
-				new Charmander("Nisse", 1, legendaryAttacks),
-				new Squirtle("Pelle", 2, legendaryAttacks),
-				new Bulbasaur("Anna", 4, legendaryAttacks),
-				new Charmander("Gunilla", 3, legendaryAttacks),
+			List<Pokemon> pokemons = [];
+			pokemons.Add(new Charmander("FireCharm", 10, attacks, con));
+			pokemons.Add(new Squirtle("WaterSquirtle", 1, attacks, con));
+			pokemons.Add(new Bulbasaur("GrassBulb", 1, attacks, con));
 
-			];
-
-			for (int c = 1; c < 4; c++)
+			for (int i = 0; i < pokemons.Count; i++)
 			{
-				Console.WriteLine($"Run {c}");
-				for (int i = 0; i < pokemons.Count; i++)
+				pokemons[i].Speak();
+				pokemons[i].Attack();
+				pokemons[i].RaiseLevel();
+
+				if (pokemons[i] is IEvolvable evolvable)
 				{
-					pokemons[i] = pokemons[i].RaiseLevel();
-					pokemons[i].Speak();
-					pokemons[i].Attack();
-					Console.WriteLine();
+					var evolved = evolvable.Evolve();
+					pokemons[i] = evolved;
 				}
-				Console.WriteLine();
 			}
 		}
 
 		private static void Main(string[] args)
 		{
-			Part2();
+			ConsoleUI con = new ConsoleUI();
+
+			List<Attack> attacks = new List<Attack>();
+			attacks.Add(new Attack("Flamethrower", ElementType.Fire, 12, con));
+			Pokemon pokemon = new Charmander("FireCharm", 10, attacks, con);
+
+			for (int i = 0; i < 3; i++)
+			{
+				pokemon.Speak();
+				pokemon.RandomAttack();
+				pokemon.RaiseLevel();
+				if (pokemon is IEvolvable evolv)
+				{
+					var evolved = evolv.Evolve();
+					pokemon = evolved;
+				}
+			}
 		}
 	}
 }

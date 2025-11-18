@@ -2,13 +2,13 @@
 {
 	internal class LegendaryAttack : Attack
 	{
-		public LegendaryAttack(Attack baseAttack) : base(baseAttack.Name, baseAttack.Type, baseAttack.BasePower)
+		public LegendaryAttack(Attack baseAttack, IUserIO io) : base(baseAttack.Name, baseAttack.Type, baseAttack.BasePower, io)
 		{
 		}
 
 		public override void Use(int level)
 		{
-			Console.WriteLine($"{Name} unleashes its potential with total power {BasePower + (level * 2)}");
+			_io.Print($"{Name} unleashes its potential with toal power {BasePower + level * 2}");
 		}
 	}
 }

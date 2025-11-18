@@ -4,19 +4,10 @@
 	{
 		private string _name = string.Empty;
 		private int _level;
-		private List<Attack> _attacks = [];
+		protected readonly List<Attack> _attacks;
+		protected readonly IUserIO _io;
 
-		/*
-			The element type for the pokemon.
-			The property is read-only.
-		*/
-		public ElementType Type { get; }
-
-		/*
-			The name of the pokemon, can not be null or contain only white space.
-			The name must be between 2 and 15 characters.
-			The value can only be modified within this class or its derived classes.
-		*/
+		private static readonly Random _rnd = new Random();
 
 		public string Name
 		{
@@ -24,131 +15,80 @@
 			protected set
 			{
 				ArgumentException.ThrowIfNullOrWhiteSpace(value, nameof(value));
-				ArgumentOutOfRangeException.ThrowIfLessThan(value.Length, 2);
-				ArgumentOutOfRangeException.ThrowIfGreaterThan(value.Length, 15);
+				if (value.Length < 2 || value.Length > 15)
+				{
+					throw new ArgumentOutOfRangeException(nameof(value), "Name must be between 2 and 15 characters.");
+				}
 				_name = value;
 			}
 		}
 
-		/*
-			The level of the pokemon, can not be less than 1.
-			The value can only be modified within this class or its derived classes.
-		*/
-
 		public int Level
 		{
-			get => _level;
+			get { return _level; }
 			protected set
 			{
-				ArgumentOutOfRangeException.ThrowIfLessThan(value, 1);
+				if (value < 1)
+				{
+					throw new ArgumentOutOfRangeException(nameof(value), "Level must be above zero.");
+				}
 				_level = value;
 			}
 		}
 
-		/*
-			The attacks for the pokemon
-			The list can not be null
-			To prevent external code from modifying the internal collection
-			Get returns a copy
-			A set creates a copy
+		public ElementType Type { get; }
 
-		*/
-
-		public List<Attack> Attacks
-		{
-			get => new List<Attack>(_attacks);
-			protected set
-			{
-				ArgumentNullException.ThrowIfNull(value, nameof(value));
-				_attacks = value.Where(a => a.Type == Type).ToList();
-			}
-		}
-
-		public Pokemon(string name, int level, ElementType type, List<Attack> attacks)
+		public Pokemon(string name, int level, ElementType type, List<Attack> attacks, IUserIO io)
 		{
 			Name = name;
 			Level = level;
 			Type = type;
-			Attacks = attacks;
+			ArgumentNullException.ThrowIfNull(attacks);
+			_attacks = attacks.Where(a => a.Type == type).ToList();
+			_io = io;
 		}
-
-		private static readonly Random _random = new();
-
-		/*
-		  Essential C# 12.0, 8th Edition
-		  Guideline:
-			AVOID accessing the backing field of a property outside the property, even from within the containing class.
-
-			Exempel:
-			Här skapas och kopieras en lista 3 gånger.
-
-			public void RandomAttack()
-			{
-				if (Attacks.Count > 0)
-				{
-					int index = _random.Next(Attacks.Count);
-					Attacks[index].Use(Level);
-				}
-			}
-
-		*/
 
 		public void RandomAttack()
 		{
-			if (_attacks.Count > 0)
+			if (_attacks.Count == 0)
 			{
-				int index = _random.Next(_attacks.Count);
-				_attacks[index].Use(Level);
+				_io.Print($"{Name} does not have any attacks!");
+				return;
 			}
+
+			int index = _rnd.Next(_attacks.Count);
+			_attacks[index].Use(Level);
 		}
 
 		public void Attack()
 		{
-			if (_attacks.Count > 0)
+			if (_attacks.Count == 0)
 			{
-				int i = 1;
-				foreach (Attack attack in Attacks)
-				{
-					Console.WriteLine($"{i++}: {attack}");
-				}
-				Console.Write("Ange attack nummer: ");
-				string? answer = Console.ReadLine();
-
-				if (int.TryParse(answer, out int index))
-				{
-					index -= 1;
-					if (index >= 0 && index < _attacks.Count)
-					{
-						_attacks[index].Use(Level);
-					}
-					else
-					{
-						Console.WriteLine("Invalid index");
-					}
-				}
-				else
-				{
-					Console.WriteLine("Invalid input");
-				}
+				_io.Print($"{Name} does not have any attacks!");
+				return;
 			}
+
+			int index;
+			do
+			{
+				for (int i = 0; i < _attacks.Count; i++)
+				{
+					_io.Print($"{i} - {_attacks[i]}");
+				}
+				index = _io.ReadInt("Enter number:");
+			} while (index < 0 || index >= _attacks.Count);
+			_attacks[index].Use(Level);
 		}
 
-		public virtual Pokemon RaiseLevel()
+		public virtual void RaiseLevel()
 		{
-			Level += 1;
-			string message = $"{Name} just leveled up to level: {Level}";
-			Console.WriteLine(message);
-			return this;
-		}
-
-		public override string ToString()
-		{
-			return $"{Name} (Type: {Type}, Level: {Level}) - Attacks: {Attacks.Count}";
+			Level++;
+			_io.Print($"{Name} leveled up to {Level}");
 		}
 
 		public virtual void Speak()
 		{
-			Console.WriteLine($"{Name} says: Char char");
+			_io.Print($"{Name} says something..");
 		}
 	}
 }

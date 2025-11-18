@@ -2,15 +2,8 @@
 {
 	internal class Bulbasaur : GrassPokemon
 	{
-		public Bulbasaur(string name, int level, List<Attack> attacks) : base(name, level, attacks)
+		public Bulbasaur(string name, int level, List<Attack> attacks, IUserIO io) : base(name, level, attacks, io)
 		{
 		}
-
-		/*
-		public void TakeNap()
-		{
-			Console.WriteLine($"{Name} takes a nap");
-		}
-		*/
 	}
 }

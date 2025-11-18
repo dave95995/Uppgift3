@@ -2,13 +2,13 @@
 {
 	internal abstract class FirePokemon : Pokemon
 	{
-		public FirePokemon(string name, int level, List<Attack> attacks) : base(name, level, ElementType.Fire, attacks)
+		public FirePokemon(string name, int level, List<Attack> attacks, IUserIO io) : base(name, level, ElementType.Fire, attacks, io)
 		{
 		}
 
 		public override void Speak()
 		{
-			Console.WriteLine($"a FirePokemon named {Name} says: Fire fire");
+			_io.Print($"{Name} says: fire!");
 		}
 	}
 }

@@ -2,13 +2,13 @@
 {
 	internal abstract class WaterPokemon : Pokemon
 	{
-		public WaterPokemon(string name, int level, List<Attack> attacks) : base(name, level, ElementType.Water, attacks)
+		public WaterPokemon(string name, int level, List<Attack> attacks, IUserIO io) : base(name, level, ElementType.Water, attacks, io)
 		{
 		}
 
 		public override void Speak()
 		{
-			Console.WriteLine($"{Name} says: Splash Splash");
+			_io.Print($"{Name} says: water!");
 		}
 	}
 }

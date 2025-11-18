@@ -1,30 +1,27 @@
 ﻿namespace Uppgift3
 {
 	internal class Charmeleon : FirePokemon, IEvolvable
+
 	{
-		private readonly int _evolveAtLevel = 6;
+		private int _evolveAtLevel = 12;
 
-		public Charmeleon(string name, int level, List<Attack> attacks) : base(name, level, attacks)
+		public Charmeleon(string name, int level, List<Attack> attacks, IUserIO io) : base(name, level, attacks, io)
 		{
-		}
-
-		public Pokemon Evolve()
-		{
-			return new Charizard(Name, Level, Attacks);
 		}
 
 		public override void Speak()
 		{
-			Console.WriteLine($"a Charmeleon named {Name} says: Fire fire fire");
+			_io.Print($"{Name} is a Charmeleon that says fire");
 		}
 
-		public override Pokemon RaiseLevel()
+		public Pokemon Evolve()
 		{
-			_ = base.RaiseLevel();
-			return Level >= _evolveAtLevel ? Evolve() : this;
+			if (Level >= _evolveAtLevel)
+			{
+				_io.Print($"{Name} is evolving...");
+				return new Charizard(Name, Level, _attacks, _io);
+			}
+			return this;
 		}
-
-
-
 	}
 }
